@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#08090d"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css"><title>БУРМАЛДА</title></head>
+<body><main class="shell">
+<header class="appbar"><div><div class="brand">БУРМАЛДА</div><div class="tagline">ТВОЙ ИИ-ПОМОЩНИК</div></div><span class="online-dot"></span></header>
+<nav class="tabs"><button class="tab active" data-tab="chat">Чат</button><button class="tab" data-tab="watch">Часы</button></nav>
+<section id="chatView" class="view">
+<div class="settings">
+<label>Нейросеть<select id="provider"><option value="ChatGPT">ChatGPT</option><option value="Google Gemini">Google Gemini</option><option value="Яндекс AI">Яндекс AI</option></select></label>
+<label>Формат ответа<select id="detail"><option value="Подробно">Подробное решение</option><option value="Кратко">Краткий ответ</option><option value="Оба варианта">Кратко + подробно</option></select></label>
+</div>
+<div id="messages" class="messages">
+<div class="welcome"><div class="welcome-orb">Б</div><h1>Привет! Я БУРМАЛДА</h1><p>Напиши вопрос или прикрепи фотографию задания. Здесь будет твоя общая переписка с телефона и часов.</p></div>
+</div>
+<div class="composer">
+<div class="attachments" id="attachmentPreview" hidden></div>
+<div class="compose-row">
+<label class="attach" for="photo" title="Сфотографировать или выбрать фото">＋</label><input id="photo" type="file" accept="image/*" capture="environment" hidden>
+<textarea id="prompt" rows="1" placeholder="Напиши сообщение…"></textarea>
+<button id="voice" class="voice" title="Диктовать">🎙</button>
+<button id="send" class="send" title="Отправить">↑</button>
+</div><div class="compose-note">Прототип интерфейса · ответы ИИ подключаются отдельно</div>
+</div>
+</section>
+<section id="watchView" class="view" hidden>
+<div class="watch-explainer">Предпросмотр интерфейса Apple Watch</div>
+<div class="watch-stage"><div class="watch-frame"><button id="watchTap" class="watch-face" aria-label="Нажать на время"><span id="watchClock">--:--</span><i id="watchDot" class="watch-dot idle"></i></button></div></div>
+<div class="watch-hint" id="watchHint">Нажми на время, чтобы начать голосовой запрос.</div>
+<div class="watch-actions"><button id="watchOpenChat">Открыть переписку</button><button id="watchReset">Сбросить состояние</button></div>
+<p class="small-note">Это интерактивный предпросмотр. Для реального запуска на Apple Watch потребуется отдельное нативное приложение watchOS и сборка через macOS/Xcode.</p>
+</section>
+</main><script src="app.js"></script></body></html>
