@@ -24,7 +24,16 @@ function sendMessage(text,photo){
  const url=photo?URL.createObjectURL(photo):null;
  addBubble("user",text||"Посмотри, пожалуйста, это задание.",url);
  const provider=$("provider").value,detail=$("detail").value;
- addBubble("bot","Запрос добавлен в демонстрационный чат.\\nНейросеть: "+provider+"\\nФормат: "+detail+"\\n\\nНастоящий ответ пока не генерируется: нужно подключить сервер и официальный API выбранного сервиса. Эта переписка пока хранится только в открытой вкладке.");
+ if(provider==="Яндекс AI"){
+   const instruction = detail==="Кратко" ? "Ответь кратко и понятно. " : detail==="Оба варианта" ? "Сначала дай краткий ответ, затем подробное объяснение. " : "Объясни подробно, по шагам и понятным языком. ";
+   const task = instruction + (text || "Помоги разобрать прикреплённое фото задания.") +
+     (photo ? "\\nЯ прикреплю фотографию задания отдельно в чате Яндекс AI." : "");
+   addBubble("bot","Открываем бесплатный чат Алисы AI. Скопируй туда свой запрос и отправь. Если было прикреплено фото, добавь его в чате Яндекса отдельно. Когда получишь ответ, вернись в БУРМАЛДУ и вставь его сюда.");
+   try { navigator.clipboard.writeText(task).then(()=>addBubble("bot","Запрос скопирован. Вставь его в поле чата Яндекс AI." )).catch(()=>addBubble("bot","Автокопирование недоступно. Скопируй свой запрос вручную из сообщения выше.")); }
+   catch(e) { addBubble("bot","Автокопирование недоступно. Скопируй свой запрос вручную."); }
+ } else {
+   addBubble("bot","Запрос добавлен в демонстрационный чат.\\nНейросеть: "+provider+"\\nФормат: "+detail+"\\n\\nНастоящий ответ пока не генерируется: для прямого подключения нужен сервер и официальный API. Эта переписка пока хранится только в открытой вкладке.");
+ }
  chosenPhoto=null;photoInput.value="";$("attachmentPreview").hidden=true;$("attachmentPreview").textContent="";
 }
 $("send").addEventListener("click",()=>{sendMessage(promptBox.value.trim(),chosenPhoto);promptBox.value="";});
@@ -49,3 +58,16 @@ $("watchTap").addEventListener("click",()=>{
 });
 $("watchOpenChat").addEventListener("click",()=>document.querySelector('[data-tab="chat"]').click());
 $("watchReset").addEventListener("click",()=>setWatchState("idle"));
+
+// Переход к официальному бесплатному чату Алисы AI.
+$("openYandex").addEventListener("click",()=>{
+ const text=promptBox.value.trim();
+ const detail=$("detail").value;
+ const instruction = detail==="Кратко" ? "Ответь кратко и понятно. " : detail==="Оба варианта" ? "Сначала дай краткий ответ, затем подробное объяснение. " : "Объясни подробно, по шагам и понятным языком. ";
+ const task=instruction+text;
+ if(text){
+   try { navigator.clipboard.writeText(task).catch(()=>{}); } catch(e) {}
+ }
+ window.open("https://alice.yandex.ru/", "_blank", "noopener");
+ if(text) addBubble("bot","Открыт официальный чат Алисы AI. Запрос "+(navigator.clipboard ? "попробовали скопировать — вставь его в чат Яндекса." : "можно скопировать из поля ввода и вставить в чат Яндекса."));
+});
